@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\KendaraanController;
+use App\Http\Controllers\MobilController;
+use App\Http\Controllers\MotorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +20,21 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/kendaraan', [KendaraanController::class, 'index']);
+Route::post('/kendaraan', [KendaraanController::class, 'store']);
+Route::get('/kendaraan/{id}', [KendaraanController::class, 'show']);
+Route::put('/kendaraan/{id}', [KendaraanController::class, 'update']);
+Route::delete('/kendaraan/{id}', [KendaraanController::class, 'destroy']);
+
+Route::get('/mobil', [MobilController::class, 'index']);
+Route::post('/mobil', [MobilController::class, 'store']);
+Route::get('/mobil/{id}', [MobilController::class, 'show']);
+Route::put('/mobil/{id}', [MobilController::class, 'update']);
+Route::delete('/mobil/{id}', [MobilController::class, 'destroy']);
+
+Route::get('/motor', [MotorController::class, 'index']);
+Route::post('/motor', [MotorController::class, 'store']);
+Route::get('/motor/{id}', [MotorController::class, 'show']);
+Route::put('/motor/{id}', [MotorController::class, 'update']);
+Route::delete('/motor/{id}', [MotorController::class, 'destroy']);
