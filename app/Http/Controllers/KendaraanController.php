@@ -20,13 +20,10 @@ class KendaraanController extends Controller
         $kendaraan = Kendaraan::all();
         $response = [
             'message' => 'Stok Kendaraan',
-            // 'data' => count($kendaraan),
             'data' => $kendaraan
         ];
 
         return response()->json($response, Response::HTTP_OK);
-        // return view('kendaraans.index', compact('kendaraan'));
-        
     }
 
     /**
@@ -112,5 +109,21 @@ class KendaraanController extends Controller
         }catch(QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
         }
+    }
+
+    public function showIndex()
+    { 
+        return view('kendaraans.index');
+    }
+
+    public function showCreate()
+    {
+        return view('kendaraans.create');
+    }
+
+    public function showEdit($id)
+    {
+        $kendaraan = Kendaraan::find($id);
+        return view('kendaraans.edit', compact('kendaraan','id'));
     }
 }

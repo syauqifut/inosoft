@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\KendaraanController;
+use App\Http\Controllers\MotorController;
+use App\Http\Controllers\MobilController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +19,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('kendaraan', [KendaraanController::class, 'showIndex'])->name('kendaraan.index');
+Route::get('kendaraan/create', [KendaraanController::class, 'showCreate'])->name('kendaraan.create');
+Route::get('kendaraan/edit/{id}', [KendaraanController::class, 'showEdit']);
+
+Route::get('motor', [MotorController::class, 'showIndex'])->name('motor.index');
+Route::get('motor/create', [MotorController::class, 'showCreate'])->name('motor.create');
+Route::get('motor/edit/{id}', [MotorController::class, 'showEdit']);
+
+Route::get('mobil', [MobilController::class, 'showIndex'])->name('mobil.index');
+Route::get('mobil/create', [MobilController::class, 'showCreate'])->name('mobil.create');
+Route::get('mobil/edit/{id}', [MobilController::class, 'showEdit']);

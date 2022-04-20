@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kendaraan;
 use App\Models\Mobil;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -109,5 +110,22 @@ class MobilController extends Controller
         }catch(QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
         }
+    }
+
+    public function showIndex()
+    {
+        return view('mobils.index');
+    }
+
+    public function showCreate()
+    {
+        return view('mobils.create');
+    }
+
+    public function showEdit($id)
+    {
+        $mobil = Mobil::find($id);
+        $kendaraan = Kendaraan::find($mobil->kendaraan);
+        return view('mobils.edit', compact('mobil', 'kendaraan', 'id'));
     }
 }

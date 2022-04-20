@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kendaraan;
 use App\Models\Motor;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -19,7 +20,6 @@ class MotorController extends Controller
         $motor = Motor::all();
         $response = [
             'message' => 'Stok Kendaraan',
-            // 'data' => count($kendaraan),
             'data' => $motor
         ];
 
@@ -34,15 +34,14 @@ class MotorController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $motor = Motor::create($request->all());
             $response = [
                 'message' => 'Create Motor',
                 'data' => $motor
             ];
-            
             return response()->json($response, Response::HTTP_CREATED);
-        }catch(QueryException $e) {
+        } catch (QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
         }
     }
@@ -56,7 +55,7 @@ class MotorController extends Controller
     public function show($id)
     {
         $motor = Motor::findOrFail($id);
-        
+
         $response = [
             'message' => 'Detail Motor',
             'data' => $motor
@@ -76,15 +75,15 @@ class MotorController extends Controller
     {
         $motor = Motor::findOrFail($id);
 
-        try{
+        try {
             $motor->update($request->all());
             $response = [
                 'message' => 'Update Motor',
                 'data' => $motor
             ];
-            
+
             return response()->json($response, Response::HTTP_OK);
-        }catch(QueryException $e) {
+        } catch (QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
         }
     }
@@ -98,16 +97,33 @@ class MotorController extends Controller
     public function destroy($id)
     {
         $motor = Motor::findOrFail($id);
-        
-        try{
+
+        try {
             $motor->delete();
             $response = [
                 'message' => 'Delete Motor',
             ];
-            
+
             return response()->json($response, Response::HTTP_OK);
-        }catch(QueryException $e) {
+        } catch (QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
         }
+    }
+
+    public function showIndex()
+    {
+        return view('motors.index');
+    }
+
+    public function showCreate()
+    {
+        return view('motors.create');
+    }
+
+    public function showEdit($id)
+    {
+        $motor = Motor::find($id);
+        $kendaraan = Kendaraan::find($motor->kendaraan);
+        return view('motors.edit', compact('motor', 'kendaraan', 'id'));
     }
 }
