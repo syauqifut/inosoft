@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\MotorController;
@@ -21,6 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/dashboard', [DashboardController::class, 'stok']);
+
+
 Route::get('/kendaraan', [KendaraanController::class, 'index']);
 Route::post('/kendaraan', [KendaraanController::class, 'store']);
 Route::get('/kendaraan/{id}', [KendaraanController::class, 'show']);
@@ -32,9 +36,11 @@ Route::post('/mobil', [MobilController::class, 'store']);
 Route::get('/mobil/{id}', [MobilController::class, 'show']);
 Route::put('/mobil/{id}', [MobilController::class, 'update']);
 Route::delete('/mobil/{id}', [MobilController::class, 'destroy']);
+Route::put('/mobil/status/{id}', [MobilController::class, 'status']);
 
 Route::get('/motor', [MotorController::class, 'index']);
 Route::post('/motor', [MotorController::class, 'store']);
 Route::get('/motor/{id}', [MotorController::class, 'show']);
 Route::put('/motor/{id}', [MotorController::class, 'update']);
 Route::delete('/motor/{id}', [MotorController::class, 'destroy']);
+Route::put('/motor/status/{id}', [MotorController::class, 'status']);

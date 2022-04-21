@@ -9,5 +9,5 @@ class Mobil extends Model
     use HasFactory;
 
     protected $collection = "mobils";
-    protected $fillable = ["mesin", "kapasitas_penumpang", "tipe", "kendaraan"];
+    protected $fillable = ["mesin", "kapasitas_penumpang", "tipe", "kendaraan", "terjual"];
 }

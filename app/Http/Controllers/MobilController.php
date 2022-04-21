@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
 use App\Models\Mobil;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,6 @@ class MobilController extends Controller
         $mobil = Mobil::all();
         $response = [
             'message' => 'Stok Kendaraan',
-            // 'data' => count($kendaraan),
             'data' => $mobil
         ];
 
@@ -35,15 +35,15 @@ class MobilController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $mobil = Mobil::create($request->all());
             $response = [
                 'message' => 'Create Mobil',
                 'data' => $mobil
             ];
-            
+
             return response()->json($response, Response::HTTP_CREATED);
-        }catch(QueryException $e) {
+        } catch (QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
         }
     }
@@ -57,7 +57,7 @@ class MobilController extends Controller
     public function show($id)
     {
         $mobil = Mobil::findOrFail($id);
-        
+
         $response = [
             'message' => 'Detail Mobil',
             'data' => $mobil
@@ -77,15 +77,15 @@ class MobilController extends Controller
     {
         $mobil = Mobil::findOrFail($id);
 
-        try{
+        try {
             $mobil->update($request->all());
             $response = [
                 'message' => 'Update Mobil',
                 'data' => $mobil
             ];
-            
+
             return response()->json($response, Response::HTTP_OK);
-        }catch(QueryException $e) {
+        } catch (QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
         }
     }
@@ -99,15 +99,40 @@ class MobilController extends Controller
     public function destroy($id)
     {
         $mobil = Mobil::findOrFail($id);
-        
-        try{
+
+        try {
             $mobil->delete();
             $response = [
                 'message' => 'Delete Mobil',
             ];
-            
+
             return response()->json($response, Response::HTTP_OK);
-        }catch(QueryException $e) {
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Failed' . $e->errorInfo]);
+        }
+    }
+
+    public function status($id)
+    {
+        $mobil = Mobil::findOrFail($id);
+        $mobilcheck = Mobil::where('_id', $id)->whereNotNull('terjual')->first();
+        $date = Carbon::now()->toDateTimeString();
+        
+        try {
+            if ($mobilcheck === null) {
+                $update['terjual'] = $date;
+            }else{
+                $update['terjual'] = NULL;
+            }
+            $mobil->update($update);
+            
+            $response = [
+                'message' => 'Update Mobil',
+                'data' => $mobil
+            ];
+
+            return response()->json($response, Response::HTTP_OK);
+        } catch (QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
         }
     }

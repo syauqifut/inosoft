@@ -114,8 +114,6 @@
                         alert(err)
                     }
                 });
-            console.log(id);
-
         });
     });
 </script>

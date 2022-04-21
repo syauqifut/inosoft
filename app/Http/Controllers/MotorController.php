@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
 use App\Models\Motor;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -102,6 +103,31 @@ class MotorController extends Controller
             $motor->delete();
             $response = [
                 'message' => 'Delete Motor',
+            ];
+
+            return response()->json($response, Response::HTTP_OK);
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Failed' . $e->errorInfo]);
+        }
+    }
+
+    public function status($id)
+    {
+        $motor = Motor::findOrFail($id);
+        $motorcheck = Motor::where('_id', $id)->whereNotNull('terjual')->first();
+        $date = Carbon::now()->toDateTimeString();
+        
+        try {
+            if ($motorcheck === null) {
+                $update['terjual'] = $date;
+            }else{
+                $update['terjual'] = NULL;
+            }
+            $motor->update($update);
+            
+            $response = [
+                'message' => 'Update Motor',
+                'data' => $motor
             ];
 
             return response()->json($response, Response::HTTP_OK);

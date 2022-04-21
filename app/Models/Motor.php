@@ -9,5 +9,5 @@ class Motor extends Model
     use HasFactory;
 
     protected $collection = "motors";
-    protected $fillable = ["mesin", "tipe_suspensi", "tipe_transmisi", "kendaraan"];
+    protected $fillable = ["mesin", "tipe_suspensi", "tipe_transmisi", "kendaraan", "terjual"];
 }
