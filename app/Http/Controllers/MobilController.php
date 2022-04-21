@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
 use App\Models\Mobil;
+use App\Repository\Mobil\MobilRepository;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -11,6 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MobilController extends Controller
 {
+    private MobilRepository $EloquentMobil;
+
+    public function __construct(MobilRepository $EloquentMobil) 
+    {
+        $this->EloquentMobil = $EloquentMobil;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,9 +26,9 @@ class MobilController extends Controller
      */
     public function index()
     {
-        $mobil = Mobil::all();
+        $mobil = $this->EloquentMobil->index();
         $response = [
-            'message' => 'Stok Kendaraan',
+            'message' => 'Mobil',
             'data' => $mobil
         ];
 
@@ -36,12 +44,11 @@ class MobilController extends Controller
     public function store(Request $request)
     {
         try {
-            $mobil = Mobil::create($request->all());
+            $mobil = $this->EloquentMobil->store($request);
             $response = [
                 'message' => 'Create Mobil',
                 'data' => $mobil
             ];
-
             return response()->json($response, Response::HTTP_CREATED);
         } catch (QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
@@ -56,7 +63,7 @@ class MobilController extends Controller
      */
     public function show($id)
     {
-        $mobil = Mobil::findOrFail($id);
+        $mobil = $this->EloquentMobil->show($id);
 
         $response = [
             'message' => 'Detail Mobil',
@@ -75,10 +82,8 @@ class MobilController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $mobil = Mobil::findOrFail($id);
-
         try {
-            $mobil->update($request->all());
+            $mobil = $this->EloquentMobil->update($request, $id);
             $response = [
                 'message' => 'Update Mobil',
                 'data' => $mobil
@@ -98,10 +103,8 @@ class MobilController extends Controller
      */
     public function destroy($id)
     {
-        $mobil = Mobil::findOrFail($id);
-
         try {
-            $mobil->delete();
+            $mobil = $this->EloquentMobil->destroy($id);
             $response = [
                 'message' => 'Delete Mobil',
             ];
@@ -114,17 +117,8 @@ class MobilController extends Controller
 
     public function status($id)
     {
-        $mobil = Mobil::findOrFail($id);
-        $mobilcheck = Mobil::where('_id', $id)->whereNotNull('terjual')->first();
-        $date = Carbon::now()->toDateTimeString();
-        
         try {
-            if ($mobilcheck === null) {
-                $update['terjual'] = $date;
-            }else{
-                $update['terjual'] = NULL;
-            }
-            $mobil->update($update);
+            $mobil = $this->EloquentMobil->status($id);
             
             $response = [
                 'message' => 'Update Mobil',
@@ -139,13 +133,20 @@ class MobilController extends Controller
 
     public function sold()
     {
-        $mobil = Mobil::whereNotNull('terjual')->get();
+        $mobil = $this->EloquentMobil->sold();
         $response = [
-            'message' => 'Motor',
+            'message' => 'Mobil',
             'data' => $mobil
         ];
 
         return response()->json($response, Response::HTTP_OK);
+    }
+
+    public function showDetailMobil($id)
+    {
+        $mobil = $this->EloquentMobil->showDetailMobil($id);
+        $kendaraan = $this->EloquentMobil->showDetailMobilKendaraan($mobil);
+        return view('dashboard.detailMobil', compact('mobil', 'kendaraan', 'id'));
     }
 
     public function showIndex()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
+use App\Repository\Kendaraan\KendaraanRepository;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,6 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class KendaraanController extends Controller
 {
+    private KendaraanRepository $EloquentKendaraan;
+
+    public function __construct(KendaraanRepository $EloquentKendaraan) 
+    {
+        $this->EloquentKendaraan = $EloquentKendaraan;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +25,7 @@ class KendaraanController extends Controller
      */
     public function index()
     {
-        $kendaraan = Kendaraan::all();
+        $kendaraan = $this->EloquentKendaraan->index();
         $response = [
             'message' => 'Stok Kendaraan',
             'data' => $kendaraan
@@ -35,7 +43,7 @@ class KendaraanController extends Controller
     public function store(Request $request)
     {
         try{
-            $kendaraan = Kendaraan::create($request->all());
+            $kendaraan = $this->EloquentKendaraan->store($request);
             $response = [
                 'message' => 'Create Kendaraan',
                 'data' => $kendaraan
@@ -55,7 +63,7 @@ class KendaraanController extends Controller
      */
     public function show($id)
     {
-        $kendaraan = Kendaraan::findOrFail($id);
+        $kendaraan = $this->EloquentKendaraan->show($id);
         
         $response = [
             'message' => 'Detail Kendaraan',
@@ -74,10 +82,9 @@ class KendaraanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $kendaraan = Kendaraan::findOrFail($id);
-
+        
         try{
-            $kendaraan->update($request->all());
+            $kendaraan = $this->EloquentKendaraan->store($request, $id);
             $response = [
                 'message' => 'Update Kendaraan',
                 'data' => $kendaraan
@@ -97,10 +104,9 @@ class KendaraanController extends Controller
      */
     public function destroy($id)
     {
-        $kendaraan = Kendaraan::findOrFail($id);
         
         try{
-            $kendaraan->delete();
+            $kendaraan = $this->EloquentKendaraan->destroy($id);
             $response = [
                 'message' => 'Delete Kendaraan',
             ];

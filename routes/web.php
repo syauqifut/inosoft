@@ -22,8 +22,8 @@ Route::get('/', function () {
 });
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('motor/detail/{id}', [DashboardController::class, 'showDetailMotor']);
-Route::get('mobil/detail/{id}', [DashboardController::class, 'showDetailMobil']);
+Route::get('motor/detail/{id}', [MotorController::class, 'showDetailMotor']);
+Route::get('mobil/detail/{id}', [MobilController::class, 'showDetailMobil']);
 
 Route::get('kendaraan', [KendaraanController::class, 'showIndex'])->name('kendaraan.index');
 Route::get('kendaraan/create', [KendaraanController::class, 'showCreate'])->name('kendaraan.create');

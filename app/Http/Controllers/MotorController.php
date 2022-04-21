@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
 use App\Models\Motor;
+use App\Repository\Motor\MotorRepository;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -11,6 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MotorController extends Controller
 {
+    private MotorRepository $EloquentMotor;
+
+    public function __construct(MotorRepository $EloquentMotor) 
+    {
+        $this->EloquentMotor = $EloquentMotor;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +26,7 @@ class MotorController extends Controller
      */
     public function index()
     {
-        $motor = Motor::all();
+        $motor = $this->EloquentMotor->index();
         $response = [
             'message' => 'Motor',
             'data' => $motor
@@ -36,7 +44,7 @@ class MotorController extends Controller
     public function store(Request $request)
     {
         try {
-            $motor = Motor::create($request->all());
+            $motor = $this->EloquentMotor->store($request);
             $response = [
                 'message' => 'Create Motor',
                 'data' => $motor
@@ -55,7 +63,7 @@ class MotorController extends Controller
      */
     public function show($id)
     {
-        $motor = Motor::findOrFail($id);
+        $motor = $this->EloquentMotor->show($id);
 
         $response = [
             'message' => 'Detail Motor',
@@ -74,10 +82,8 @@ class MotorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $motor = Motor::findOrFail($id);
-
         try {
-            $motor->update($request->all());
+            $motor = $this->EloquentMotor->update($request, $id);
             $response = [
                 'message' => 'Update Motor',
                 'data' => $motor
@@ -97,10 +103,8 @@ class MotorController extends Controller
      */
     public function destroy($id)
     {
-        $motor = Motor::findOrFail($id);
-
         try {
-            $motor->delete();
+            $motor = $this->EloquentMotor->destroy($id);;
             $response = [
                 'message' => 'Delete Motor',
             ];
@@ -113,17 +117,9 @@ class MotorController extends Controller
 
     public function status($id)
     {
-        $motor = Motor::findOrFail($id);
-        $motorcheck = Motor::where('_id', $id)->whereNotNull('terjual')->first();
-        $date = Carbon::now()->toDateTimeString();
         
         try {
-            if ($motorcheck === null) {
-                $update['terjual'] = $date;
-            }else{
-                $update['terjual'] = NULL;
-            }
-            $motor->update($update);
+            $motor = $this->EloquentMotor->status($id);
             
             $response = [
                 'message' => 'Update Motor',
@@ -138,13 +134,20 @@ class MotorController extends Controller
 
     public function sold()
     {
-        $motor = Motor::whereNotNull('terjual')->get();
+        $motor = $this->EloquentMotor->sold();
         $response = [
             'message' => 'Motor',
             'data' => $motor
         ];
 
         return response()->json($response, Response::HTTP_OK);
+    }
+
+    public function showDetailMotor($id)
+    {
+        $motor = $this->EloquentMotor->showDetailMotor($id);
+        $kendaraan = $this->EloquentMotor->showDetailMotorKendaraan($motor);
+        return view('dashboard.detailMotor', compact('motor', 'kendaraan', 'id'));
     }
 
     public function showIndex()

@@ -47,18 +47,4 @@ class DashboardController extends Controller
     public function index(){
         return view('dashboard.index');
     }
-
-    public function showDetailMotor($id)
-    {
-        $motor = Motor::find($id);
-        $kendaraan = Kendaraan::find($motor->kendaraan);
-        return view('dashboard.detailMotor', compact('motor', 'kendaraan', 'id'));
-    }
-
-    public function showDetailMobil($id)
-    {
-        $mobil = Mobil::find($id);
-        $kendaraan = Kendaraan::find($mobil->kendaraan);
-        return view('dashboard.detailMobil', compact('mobil', 'kendaraan', 'id'));
-    }
 }
