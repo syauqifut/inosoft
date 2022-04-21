@@ -11,5 +11,6 @@
 
 -clone repository ini terlebih dahulu
 -setting env untuk menyesuaikan mongodb
+-lakukan composer update
 -run dengan php artisan serve
 -akses di web 127.0.0.1:8000/dashboard
