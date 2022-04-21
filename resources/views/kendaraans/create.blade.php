@@ -1,4 +1,4 @@
-@extends('kendaraans.layout')
+@extends('layout')
 
 @section('content')
 <div class="row">
