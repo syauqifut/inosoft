@@ -32,6 +32,7 @@ Route::put('/kendaraan/{id}', [KendaraanController::class, 'update']);
 Route::delete('/kendaraan/{id}', [KendaraanController::class, 'destroy']);
 
 Route::get('/mobil', [MobilController::class, 'index']);
+Route::get('/mobilsold', [MobilController::class, 'sold']);
 Route::post('/mobil', [MobilController::class, 'store']);
 Route::get('/mobil/{id}', [MobilController::class, 'show']);
 Route::put('/mobil/{id}', [MobilController::class, 'update']);
@@ -39,6 +40,7 @@ Route::delete('/mobil/{id}', [MobilController::class, 'destroy']);
 Route::put('/mobil/status/{id}', [MobilController::class, 'status']);
 
 Route::get('/motor', [MotorController::class, 'index']);
+Route::get('/motorsold', [MotorController::class, 'sold']);
 Route::post('/motor', [MotorController::class, 'store']);
 Route::get('/motor/{id}', [MotorController::class, 'show']);
 Route::put('/motor/{id}', [MotorController::class, 'update']);

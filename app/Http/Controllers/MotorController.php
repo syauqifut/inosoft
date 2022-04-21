@@ -20,7 +20,7 @@ class MotorController extends Controller
     {
         $motor = Motor::all();
         $response = [
-            'message' => 'Stok Kendaraan',
+            'message' => 'Motor',
             'data' => $motor
         ];
 
@@ -134,6 +134,17 @@ class MotorController extends Controller
         } catch (QueryException $e) {
             return response()->json(['message' => 'Failed' . $e->errorInfo]);
         }
+    }
+
+    public function sold()
+    {
+        $motor = Motor::whereNotNull('terjual')->get();
+        $response = [
+            'message' => 'Motor',
+            'data' => $motor
+        ];
+
+        return response()->json($response, Response::HTTP_OK);
     }
 
     public function showIndex()

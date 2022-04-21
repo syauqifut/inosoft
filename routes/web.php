@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\MobilController;
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('motor/detail/{id}', [DashboardController::class, 'showDetailMotor']);
+Route::get('mobil/detail/{id}', [DashboardController::class, 'showDetailMobil']);
 
 Route::get('kendaraan', [KendaraanController::class, 'showIndex'])->name('kendaraan.index');
 Route::get('kendaraan/create', [KendaraanController::class, 'showCreate'])->name('kendaraan.create');

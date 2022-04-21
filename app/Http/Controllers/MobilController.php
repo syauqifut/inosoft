@@ -137,6 +137,17 @@ class MobilController extends Controller
         }
     }
 
+    public function sold()
+    {
+        $mobil = Mobil::whereNotNull('terjual')->get();
+        $response = [
+            'message' => 'Motor',
+            'data' => $mobil
+        ];
+
+        return response()->json($response, Response::HTTP_OK);
+    }
+
     public function showIndex()
     {
         return view('mobils.index');
